@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import useStore from '../store/useStore'
 import CategoryCard from '../components/CategoryCard'
 
@@ -14,10 +15,19 @@ const CATEGORIES = [
 ]
 
 function Categories({ onCategoriesSelected }) {
+  const navigate = useNavigate()
+  const storedSelected = useStore((state) => state.selectedCategories)
   const [selected, setSelected] = useState([])
   const setSelectedCategories = useStore((state) => state.setSelectedCategories)
   const saveToStorage = useStore((state) => state.saveToStorage)
   const user = useStore((state) => state.user)
+
+  // Initialize local selection from store so "Change category" pre-populates
+  useEffect(() => {
+    if (storedSelected && storedSelected.length > 0) {
+      setSelected(storedSelected)
+    }
+  }, [storedSelected])
 
   const toggleCategory = (category) => {
     setSelected((prev) =>
@@ -36,7 +46,9 @@ function Categories({ onCategoriesSelected }) {
         selectedCategories: selected,
         notes: stored.notes
       })
-      onCategoriesSelected()
+      // Inform parent state and navigate to dashboard explicitly
+      if (typeof onCategoriesSelected === 'function') onCategoriesSelected()
+      navigate('/dashboard')
     }
   }
 
@@ -83,7 +95,7 @@ function Categories({ onCategoriesSelected }) {
           {isValid && (
             <button
               onClick={handleProceed}
-              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 active:scale-95 fade-in"
+              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105"
             >
               Next Page →
             </button>

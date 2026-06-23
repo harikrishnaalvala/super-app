@@ -51,6 +51,25 @@ const useStore = create((set) => ({
   
   clearError: () => set({ error: null }),
   
+  // Logout helper: clears store and localStorage
+  logout: () => {
+    // Clear persisted storage
+    try {
+      localStorage.removeItem('superAppStore')
+    } catch (e) {
+      // ignore
+    }
+    // Reset state
+    set({
+      user: { name: '', username: '', email: '', mobile: '' },
+      selectedCategories: [],
+      movies: [],
+      notes: [],
+      loading: false,
+      error: null
+    })
+  },
+  
   // Persistence helpers
   loadFromStorage: () => {
     const stored = localStorage.getItem('superAppStore')

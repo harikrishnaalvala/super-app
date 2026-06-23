@@ -9,6 +9,7 @@ import NotesWidget from '../components/NotesWidget'
 function Dashboard() {
   const user = useStore((state) => state.user)
   const selectedCategories = useStore((state) => state.selectedCategories)
+  const logout = useStore((state) => state.logout)
   const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -16,6 +17,11 @@ function Dashboard() {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     return () => clearInterval(timer)
   }, [])
+
+  const handleLogout = () => {
+    logout()
+    navigate('/register')
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4 sm:p-8">
@@ -42,15 +48,6 @@ function Dashboard() {
             </div>
 
             <div className="text-right flex items-center gap-4">
-              {/* Back: navigate in history */}
-              <button
-                onClick={() => navigate(-1)}
-                aria-label="Go back"
-                className="bg-white/10 hover:bg-white/20 text-white font-medium py-2 px-4 rounded-full transition"
-              >
-                ← Back
-              </button>
-
               {/* Change category: go to the Categories page */}
               <button
                 onClick={() => navigate('/categories')}
@@ -60,10 +57,23 @@ function Dashboard() {
                 Change category
               </button>
 
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                aria-label="Logout"
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition"
+              >
+                Logout
+              </button>
+
               {/* Avatar */}
-              <div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">
-                {user.name ? user.name.charAt(0).toUpperCase() : '?'}
-              </div>
+              {user.avatar ? (
+                <img src={user.avatar} alt={user.name || 'avatar'} className="w-20 h-20 rounded-full object-cover" />
+              ) : (
+                <div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+                  {user.name ? user.name.charAt(0).toUpperCase() : '?'}
+                </div>
+              )}
             </div>
           </div>
         </div>

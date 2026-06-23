@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import useStore from '../store/useStore'
 import WeatherWidget from '../components/WeatherWidget'
 import NewsWidget from '../components/NewsWidget'
@@ -7,6 +8,8 @@ import NotesWidget from '../components/NotesWidget'
 
 function Dashboard() {
   const user = useStore((state) => state.user)
+  const selectedCategories = useStore((state) => state.selectedCategories)
+  const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
@@ -27,10 +30,39 @@ function Dashboard() {
                 <p>{user.email}</p>
                 <p>{user.mobile}</p>
               </div>
+              {selectedCategories && selectedCategories.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {selectedCategories.map((c) => (
+                    <span key={c} className="bg-white/10 text-white px-3 py-1 rounded-full text-sm">
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="text-right">
+
+            <div className="text-right flex items-center gap-4">
+              {/* Back: navigate in history */}
+              <button
+                onClick={() => navigate(-1)}
+                aria-label="Go back"
+                className="bg-white/10 hover:bg-white/20 text-white font-medium py-2 px-4 rounded-full transition"
+              >
+                ← Back
+              </button>
+
+              {/* Change category: go to the Categories page */}
+              <button
+                onClick={() => navigate('/categories')}
+                aria-label="Change category"
+                className="bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-full transition"
+              >
+                Change category
+              </button>
+
+              {/* Avatar */}
               <div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">
-                {user.name.charAt(0).toUpperCase()}
+                {user.name ? user.name.charAt(0).toUpperCase() : '?'}
               </div>
             </div>
           </div>

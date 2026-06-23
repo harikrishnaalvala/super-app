@@ -5,7 +5,8 @@ function RegistrationForm({ onSubmit }) {
     name: '',
     username: '',
     email: '',
-    mobile: ''
+    mobile: '',
+    avatar: ''
   })
   const [errors, setErrors] = useState({})
   const [touched, setTouched] = useState({})
@@ -126,7 +127,7 @@ function RegistrationForm({ onSubmit }) {
     }
   }
 
-  const isFormValid = Object.keys(errors).length === 0 && Object.values(formData).every((v) => v.trim())
+  const isFormValid = Object.keys(errors).length === 0 && formData.name.trim() && formData.username.trim() && formData.email.trim() && formData.mobile.trim()
 
   return (
     <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 shadow-xl">
@@ -216,6 +217,22 @@ function RegistrationForm({ onSubmit }) {
         {touched.mobile && errors.mobile && (
           <p className="text-red-400 text-sm mt-1">{errors.mobile}</p>
         )}
+      </div>
+
+      {/* Avatar URL Field (Optional) */}
+      <div className="mb-6">
+        <label htmlFor="avatar" className="block text-gray-300 text-sm font-medium mb-2">
+          Avatar URL (Optional)
+        </label>
+        <input
+          type="url"
+          id="avatar"
+          name="avatar"
+          value={formData.avatar}
+          onChange={handleChange}
+          className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none transition-all border border-gray-600 focus:border-green-500"
+          placeholder="Enter avatar image URL (optional)"
+        />
       </div>
 
       {/* Checkbox */}

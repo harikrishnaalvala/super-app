@@ -6,7 +6,8 @@ const useStore = create((set) => ({
     name: '',
     username: '',
     email: '',
-    mobile: ''
+    mobile: '',
+    avatar: '' // optional avatar URL
   },
   
   // Selected categories
@@ -61,7 +62,7 @@ const useStore = create((set) => ({
     }
     // Reset state
     set({
-      user: { name: '', username: '', email: '', mobile: '' },
+      user: { name: '', username: '', email: '', mobile: '', avatar: '' },
       selectedCategories: [],
       movies: [],
       notes: [],
